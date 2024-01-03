@@ -20,16 +20,29 @@ class LabelsViewModel(private val mailsRepository: MailsRepository) : ViewModel(
     val labels: LiveData<List<Label>> get() = _labels
     private val _isError: MutableLiveData<Event<String>> = MutableLiveData()
     val isError: LiveData<Event<String>> get() = _isError
+    private val _isCreateLabelError: MutableLiveData<Event<String>> = MutableLiveData()
+    val isCreateLabelError: LiveData<Event<String>> get() = _isCreateLabelError
+    private val _isCreateLabelSuccess: MutableLiveData<Event<String>> = MutableLiveData()
+    val isCreateLabelSuccess: LiveData<Event<String>> get() = _isCreateLabelSuccess
 
     init {
         getLabels()
     }
 
-    private fun getLabels() {
+    fun getLabels() {
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = mailsRepository.getLabels("me")) {
                 is Result.Success -> _labels.postValue(result.data!!)
                 is Result.Error -> _isError.postValue(Event(result.message))
+            }
+        }
+    }
+
+    fun createLabel(name: String, labelColor:String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = mailsRepository.createLabel("me", name, labelColor)) {
+                is Result.Success -> _isCreateLabelSuccess.postValue(Event(result.data))
+                is Result.Error -> _isCreateLabelError.postValue(Event(result.message))
             }
         }
     }

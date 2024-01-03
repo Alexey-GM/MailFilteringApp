@@ -1,6 +1,7 @@
 package com.example.mailfilteringapp.ui.labels
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -10,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mailfilteringapp.databinding.ItemLabelsListBinding
 import com.google.api.services.gmail.model.Label
 
-class LabelsAdapter(private val onClick: (String) -> Unit) :
+class LabelsAdapter(private val onClick: (String, Boolean) -> Unit) :
     ListAdapter<Label, LabelsAdapter.ElementsViewHolder>(
         NewsDiffCallback()
     ) {
@@ -28,17 +29,21 @@ class LabelsAdapter(private val onClick: (String) -> Unit) :
 
     inner class ElementsViewHolder(
         private val binding: ItemLabelsListBinding,
-        private val onClick: (String) -> Unit
+        private val onClick: (String, Boolean) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(label: Label) {
             binding.tvName.text = label.name
-            if (label.type == "user") {
+            if (label.type == "user" && label.color != null) {
                 binding.ivLabelColor.setColorFilter(Color.parseColor(label.color.backgroundColor))
             } else {
                 binding.ivLabelColor.isVisible = false
             }
             binding.root.setOnClickListener {
-                onClick(label.id)
+                if (label.type == "user") {
+                    onClick(label.id, true)
+                } else {
+                    onClick(label.id, false)
+                }
             }
         }
     }

@@ -13,6 +13,12 @@
         <action
             android:id="@+id/action_labelsFragment_to_messagesFragment"
             app:destination="@id/messagesFragment" />
+        <action
+            android:id="@+id/action_labelsFragment_to_createLabelDialogFragment"
+            app:destination="@id/createLabelDialogFragment" />
+        <action
+            android:id="@+id/action_labelsFragment_to_messageUserLabelsFragment"
+            app:destination="@id/messageUserLabelsFragment" />
     </fragment>
     <fragment
         android:id="@+id/messagesFragment"
@@ -23,6 +29,9 @@
             android:name="labelId"
             app:argType="string"
             app:nullable="true" />
+        <argument
+            android:name="allLabels"
+            app:argType="com.example.mailfilteringapp.ui.model.CustomLabel[]" />
     </fragment>
     <fragment
         android:id="@+id/accountPickerFragment"
@@ -32,5 +41,22 @@
         <action
             android:id="@+id/action_accountPickerFragment_to_labelsFragment"
             app:destination="@id/labelsFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/createLabelDialogFragment"
+        android:name="com.example.mailfilteringapp.ui.labels.CreateLabelDialogFragment"
+        android:label="CreateLabelDialogFragment" />
+    <fragment
+        android:id="@+id/messageUserLabelsFragment"
+        android:name="com.example.mailfilteringapp.ui.messages.MessageUserLabelsFragment"
+        android:label="fragment_message_user_labels"
+        tools:layout="@layout/fragment_message_user_labels" >
+        <argument
+            android:name="labelId"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="allLabels"
+            app:argType="com.example.mailfilteringapp.ui.model.CustomLabel[]" />
     </fragment>
 </navigation>
